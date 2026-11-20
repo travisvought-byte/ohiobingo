@@ -38,7 +38,7 @@ SITE_ID = 'e246b7de-4fac-46bb-8794-6b72ccaa5636'
 API = os.environ.get('WIX_API_BASE', 'https://www.wixapis.com')
 DOWNLOAD = os.environ.get('WIX_DOWNLOAD_BASE', 'https://www.wix.com')
 # What is in the repository but is not part of the website.
-NOT_SITE = ('README.md', 'LICENSE', 'package.json', 'package-lock.json')
+NOT_SITE = ('README.md', 'assets/share.png', 'LICENSE', 'package.json', 'package-lock.json')
 NOT_SITE_DIRS = ('scripts/', 'tests/', 'data/', 'templates/', '.github/', 'node_modules/')
 # Wix removes its own script tag from a page when it stores it and adds it back when it serves it.
 WIX_TAG = re.compile(rb'<script id="wix-site-script"[^>]*></script>\n?')

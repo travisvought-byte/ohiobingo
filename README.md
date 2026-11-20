@@ -23,7 +23,7 @@ This site links to the guides and finders rather than copying them, so nothing i
 - Wix serves its own `robots.txt` and `/sitemap.xml` in place of the files here. Keep them anyway.
 - Because Wix's own `/sitemap.xml` for this site answers "not found," the page list is also published as
   `site-pages.xml`. That is the address to give Google Search Console. Keep the two files the same.
-- `assets/share.png` is the picture shown when a page is shared (1200 by 630).
+- `assets/share.png` is the picture shown when a page is shared (1200 by 630). Pages load it from this repository on GitHub (raw.githubusercontent.com), so it is kept in one place and is not uploaded to Wix.
 
 ## Publishing to Wix
 
