@@ -1,0 +1,2 @@
+// Visit counter (GoatCounter): page views only, no cookies. Paths carry the site name so this site's pages stay apart from the other sites on the same counter.
+(function(){if(window.vhgCountLoaded)return;window.vhgCountLoaded=true;var h=location.hostname.replace(/^www\./,'');window.goatcounter={path:function(p){return '/'+h+p.replace(/\?.*$/,'');}};var s=document.createElement('script');s.async=true;s.src='https://gc.zgo.at/count.js';s.setAttribute('data-goatcounter','https://vhg-guide.goatcounter.com/count');document.head.appendChild(s);})();

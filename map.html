@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ohio Bingo Map | Ohio Bingo</title>
+<meta name="description" content="An interactive map of Ohio bingo by county and region, with links to every listed game.">
+<link rel="canonical" href="https://www.ohiobingo.org/map.html">
+<link rel="stylesheet" href="/site.css?v=6">
+<style>
+.maplayout { display: grid; grid-template-columns: minmax(0, 3fr) minmax(260px, 2fr); gap: 24px; align-items: start; margin-top: 24px; }
+.regionbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.regionbar button { font: inherit; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 1rem; font-weight: 600; min-height: 44px; padding: 8px 16px; border-radius: 999px; border: 1px solid #14304f; background: #fff; color: #14304f; cursor: pointer; }
+.regionbar button[aria-pressed="true"] { background: #14304f; color: #fff; }
+#map { background: #fff; border: 1px solid #ddd8cc; border-radius: 6px; padding: 8px; }
+#map svg { display: block; width: 100%; height: auto; }
+#map path { stroke: #fff; stroke-width: 1; cursor: pointer; transition: opacity 0.15s; }
+#map path:hover, #map path:focus { stroke: #b8862b; stroke-width: 2.5; outline: none; }
+#map path.dim { opacity: 0.25; }
+#map path.sel { stroke: #b8862b; stroke-width: 3; }
+.legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 0.9rem; color: #55606e; }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.legend i { width: 14px; height: 14px; border-radius: 2px; display: inline-block; border: 1px solid #c9c4b8; }
+#panel { background: #fff; border: 1px solid #ddd8cc; border-top: 4px solid #b8862b; border-radius: 4px; padding: 20px; position: sticky; top: 16px; }
+#panel h2, #panel h3 { font-size: 1.4rem; margin-bottom: 2px; }
+#panel .where { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; color: #7a5712; font-weight: 700; margin: 0 0 12px; }
+#panel .nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+#panel .nums div { background: #eef1f5; border-radius: 4px; padding: 8px; text-align: center; }
+#panel .nums strong { display: block; font-size: 1.4rem; color: #0d2138; line-height: 1.1; }
+#panel .nums span { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 0.85rem; color: #55606e; }
+#panel ul { padding-left: 18px; margin: 0 0 14px; font-size: 1rem; }
+#panel li { margin-bottom: 8px; }
+#panel li small { display: block; color: #55606e; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+#panel .btn { display: block; text-align: center; margin-bottom: 8px; }
+.countylinks { display: flex; flex-wrap: wrap; gap: 6px; }
+.countylinks a { display: inline-flex; align-items: center; min-height: 44px; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 0.95rem; text-decoration: none; border: 1px solid #c9c4b8; border-radius: 999px; padding: 6px 14px; background: #faf8f3; }
+.countylinks a:hover { border-color: #14304f; }
+.countylinks a b { color: #7a5712; margin-left: 4px; }
+@media (max-width: 820px) { .maplayout { grid-template-columns: 1fr; } #panel { position: static; } }
+</style>
+<script src="/count.js" async></script></head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <a class="brand" href="/"><span class="brandball" aria-hidden="true">B</span>Ohio Bingo <span class="by">by Veteran Home Guardians</span></a>
+  <nav aria-label="Main">
+    <a href="https://www.findbingo.org/ohio/">Find a Game</a>
+    <a href="/players.html">Players</a>
+    <a href="/halls.html">Halls</a>
+    <a href="/distributors.html">Distributors</a>
+    <a href="/map.html" aria-current="page">Map</a>
+    <a href="/law.html">Ohio Law</a>
+    <a href="/contact.html">Contact</a>
+    <a class="btn small" href="/visit.html">Work with us</a>
+  </nav>
+</header>
+<main id="main">
+<section class="hero" style="max-width:none">
+  <p class="eyebrow">Every county, every listed game</p>
+  <h1>Bingo across Ohio</h1>
+  <p class="lead">Pick a region or select a county to see what is listed there. Darker counties have more state-listed bingo locations.</p>
+</section>
+
+<div class="maplayout">
+  <div>
+    <div id="regionbar" class="regionbar" role="group" aria-label="Filter the map by region"></div>
+    <div id="map" aria-label="Map of Ohio counties shaded by number of bingo locations"><p class="fine" id="mapnote">Loading the map…</p></div>
+    <div class="legend" aria-hidden="true">
+      <span><i style="background:#f1eee6"></i>None listed</span>
+      <span><i style="background:#c5d3e3"></i>1 to 4</span>
+      <span><i style="background:#8aa6c6"></i>5 to 9</span>
+      <span><i style="background:#3f6a99"></i>10 to 19</span>
+      <span><i style="background:#14304f"></i>20 or more</span>
+    </div>
+  </div>
+  <aside id="panel" aria-live="polite">
+    <h2>Select a county</h2>
+    <p>Choose a county on the map, or use the region lists below, to see its bingo locations and senior centers.</p>
+    <a class="btn" href="https://www.findbingo.org/ohio/">Search by ZIP code instead</a>
+  </aside>
+</div>
+
+<section>
+  <h2>Browse by region</h2>
+  <div id="regionlist" class="cards two"></div>
+  <p class="fine">Counts come from the Ohio Attorney General's list of authorized bingo locations and our senior center research, and update when the finder's data updates. Most state-listed locations do not have a published schedule yet. Confirm details with each venue. Regions are our own grouping for browsing.</p>
+</section>
+</main>
+<footer>
+  <p class="footnav"><a href="https://www.findbingo.org/ohio/">Find a game</a> · <a href="/players.html">Players</a> · <a href="/halls.html">Halls</a> · <a href="/distributors.html">Distributors</a> · <a href="/causes.html">Causes</a> · <a href="/advocacy.html">Access</a> · <a href="/law.html">Ohio law</a></p>
+  <p><a href="/claim.html">Run a game? Claim your free listing or send a flyer</a></p>
+  <p><strong>Ohio Bingo</strong> is a program of Veteran Home Guardians, a 501(c)(3) nonprofit. EIN 33-4637180.</p>
+  <p>Marengo, Ohio · <a href="tel:6146236330">614-623-6330</a> · <a href="mailto:travis@vethomeguard.org">travis@vethomeguard.org</a></p>
+  <p class="fine">We list and promote games; we do not conduct bingo. Charitable bingo in Ohio is licensed by the Ohio Attorney General. Nothing on this site is legal advice.</p>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+<script>
+(function () {
+  var FINDER = 'https://www.findbingo.org/ohio/';
+  var DATA = 'https://guide.vethomeguard.org/data/public/';
+  var REGIONS = {
+    'Northwest': ['Williams', 'Fulton', 'Lucas', 'Ottawa', 'Defiance', 'Henry', 'Wood', 'Sandusky', 'Paulding', 'Putnam', 'Hancock', 'Seneca', 'Van Wert', 'Allen', 'Hardin', 'Wyandot', 'Mercer', 'Auglaize', 'Erie', 'Huron', 'Crawford'],
+    'Northeast': ['Lorain', 'Cuyahoga', 'Lake', 'Geauga', 'Ashtabula', 'Medina', 'Summit', 'Portage', 'Trumbull', 'Mahoning', 'Wayne', 'Stark', 'Columbiana', 'Ashland', 'Richland', 'Holmes', 'Tuscarawas', 'Carroll'],
+    'Central': ['Franklin', 'Delaware', 'Union', 'Madison', 'Pickaway', 'Fairfield', 'Licking', 'Knox', 'Morrow', 'Marion', 'Fayette'],
+    'West and Southwest': ['Hamilton', 'Butler', 'Warren', 'Clermont', 'Montgomery', 'Greene', 'Clark', 'Miami', 'Darke', 'Preble', 'Shelby', 'Logan', 'Champaign', 'Clinton', 'Brown', 'Highland', 'Adams'],
+    'Southeast': ['Coshocton', 'Muskingum', 'Guernsey', 'Belmont', 'Harrison', 'Jefferson', 'Monroe', 'Noble', 'Morgan', 'Perry', 'Hocking', 'Athens', 'Washington', 'Meigs', 'Vinton', 'Ross', 'Pike', 'Scioto', 'Jackson', 'Gallia', 'Lawrence']
+  };
+  var regionOf = {};
+  Object.keys(REGIONS).forEach(function (r) {
+    REGIONS[r].forEach(function (c) { regionOf[c] = r; });
+  });
+  var counts = {};
+  var activeRegion = null;
+  var selected = null;
+  var panel = document.getElementById('panel');
+  var mapEl = document.getElementById('map');
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (ch) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch];
+    });
+  }
+  function slot(c) {
+    if (!counts[c]) counts[c] = { games: 0, scheduled: 0, centers: 0, list: [] };
+    return counts[c];
+  }
+  function get(c) {
+    return counts[c] || { games: 0, scheduled: 0, centers: 0, list: [] };
+  }
+  function shade(n) {
+    if (n >= 20) return '#14304f';
+    if (n >= 10) return '#3f6a99';
+    if (n >= 5) return '#8aa6c6';
+    if (n >= 1) return '#c5d3e3';
+    return '#f1eee6';
+  }
+  function countyUrl(name, extra) {
+    return FINDER + '?county=' + encodeURIComponent(name) + (extra || '');
+  }
+
+  function select(name) {
+    selected = name;
+    var c = get(name);
+    var html = '<h2>' + esc(name) + ' County</h2>' +
+      '<p class="where">' + esc(regionOf[name] || 'Ohio') + ' Ohio</p>' +
+      '<div class="nums">' +
+      '<div><strong>' + c.games + '</strong><span>bingo locations</span></div>' +
+      '<div><strong>' + c.scheduled + '</strong><span>with schedules</span></div>' +
+      '<div><strong>' + c.centers + '</strong><span>senior centers</span></div>' +
+      '</div>';
+    if (c.list.length) {
+      html += '<ul>';
+      c.list.slice(0, 5).forEach(function (x) {
+        html += '<li>' + esc(x.name) + '<small>' + esc(x.schedule) + '</small></li>';
+      });
+      html += '</ul>';
+    } else if (c.games) {
+      html += '<p>No published schedules here yet. The finder lists each location so you can call ahead.</p>';
+    } else {
+      html += '<p>No state-listed bingo locations in this county yet.</p>';
+    }
+    if (c.games || c.centers) {
+      html += '<a class="btn" href="' + countyUrl(name) + '">See everything in ' + esc(name) + ' County</a>';
+    }
+    html += '<a class="btn ghost" href="/advertise.html#inquire">Run a game here? Get listed</a>';
+    panel.innerHTML = html;
+    if (window.d3) {
+      d3.selectAll('#map path').classed('sel', function (d) { return d.properties.name === name; });
+    }
+  }
+
+  function applyRegion() {
+    document.querySelectorAll('#regionbar button').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-region') === (activeRegion || '')));
+    });
+    if (window.d3) {
+      d3.selectAll('#map path').classed('dim', function (d) {
+        return activeRegion ? regionOf[d.properties.name] !== activeRegion : false;
+      });
+    }
+  }
+
+  function renderRegions() {
+    var bar = document.getElementById('regionbar');
+    var list = document.getElementById('regionlist');
+    var barHtml = '<button type="button" data-region="" aria-pressed="true">All Ohio</button>';
+    var listHtml = '';
+    Object.keys(REGIONS).forEach(function (r) {
+      var total = 0;
+      var links = '';
+      REGIONS[r].slice().sort().forEach(function (c) {
+        var n = get(c).games;
+        total += n;
+        links += '<a href="' + countyUrl(c) + '">' + esc(c) + '<b>' + n + '</b></a>';
+      });
+      barHtml += '<button type="button" data-region="' + esc(r) + '" aria-pressed="false">' + esc(r) + ' (' + total + ')</button>';
+      listHtml += '<article class="card"><h3>' + esc(r) + ' Ohio</h3><p>' + total + ' state-listed bingo locations in ' + REGIONS[r].length + ' counties.</p><div class="countylinks">' + links + '</div></article>';
+    });
+    bar.innerHTML = barHtml;
+    list.innerHTML = listHtml;
+    bar.addEventListener('click', function (e) {
+      var b = e.target.closest('button');
+      if (!b) return;
+      activeRegion = b.getAttribute('data-region') || null;
+      applyRegion();
+    });
+  }
+
+  function drawMap() {
+    if (!window.d3 || !window.topojson) {
+      mapEl.innerHTML = '<p class="fine">The map could not load. Use the region lists below.</p>';
+      return;
+    }
+    fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json').then(function (r) { return r.json(); }).then(function (us) {
+      var all = topojson.feature(us, us.objects.counties).features;
+      var feats = all.filter(function (f) { return String(f.id).slice(0, 2) === '39'; });
+      var W = 640;
+      var H = 680;
+      var projection = d3.geoMercator().fitSize([W, H], { type: 'FeatureCollection', features: feats });
+      var path = d3.geoPath(projection);
+      mapEl.innerHTML = '';
+      var svg = d3.select(mapEl).append('svg').attr('viewBox', '0 0 ' + W + ' ' + H).attr('role', 'group');
+      svg.selectAll('path').data(feats).enter().append('path')
+        .attr('d', path)
+        .attr('fill', function (d) { return shade(get(d.properties.name).games); })
+        .attr('tabindex', 0)
+        .attr('role', 'button')
+        .attr('aria-label', function (d) { return d.properties.name + ' County: ' + get(d.properties.name).games + ' bingo locations'; })
+        .on('click', function (event, d) { select(d.properties.name); })
+        .on('keydown', function (event, d) {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            select(d.properties.name);
+          }
+        })
+        .append('title').text(function (d) { return d.properties.name + ' County: ' + get(d.properties.name).games + ' bingo locations'; });
+      applyRegion();
+    }).catch(function () {
+      mapEl.innerHTML = '<p class="fine">The map could not load. Use the region lists below.</p>';
+    });
+  }
+
+  function getJson(name) {
+    return fetch(DATA + name).then(function (r) { return r.json(); });
+  }
+  Promise.all([getJson('ohio-bingo-authorized.json'), getJson('ohio-community-centers.json'), getJson('ohio-bingo.json').catch(function () { return []; })]).then(function (res) {
+    var better = {};
+    res[2].forEach(function (x) { if (x.license_number) better[x.license_number] = x; });
+    res[0] = res[0].map(function (x) { return better[x.license_number] || x; });
+    res[0].forEach(function (x) {
+      if (!x.county) return;
+      var s = slot(x.county);
+      s.games++;
+      if (x.schedule) {
+        s.scheduled++;
+        s.list.push(x);
+      }
+    });
+    res[1].forEach(function (x) {
+      if (x.county) slot(x.county).centers++;
+    });
+    renderRegions();
+    drawMap();
+  }).catch(function () {
+    mapEl.innerHTML = '<p class="fine">The listings could not load right now.</p>';
+    panel.innerHTML = '<h2>Listings unavailable</h2><p>Please use the finder directly.</p><a class="btn" href="' + FINDER + '">Open the Bingo Finder</a>';
+  });
+})();
+</script>
+</body>
+</html>
