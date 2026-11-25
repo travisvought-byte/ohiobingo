@@ -211,3 +211,82 @@ form.mail label { font-size: 1rem; }
   .hero.big { padding-top: 26px; }
   .top { padding: 12px 16px; gap: 6px 24px; }
 }
+
+/* v7: icons, step diagrams, simple charts. Every icon is drawn in currentColor so it follows the text color. */
+svg.ico { width: 1.35em; height: 1.35em; vertical-align: -0.28em; margin-right: 0.35em; color: var(--navy); flex: none; }
+.cardicon { display: block; width: 52px; height: 52px; padding: 11px; margin: 0 0 12px; border-radius: 50%; background: #eef1f5; color: var(--navy); }
+.card.yes .cardicon { color: #1d5b2e; background: #e8f2ea; }
+.card.no .cardicon { color: var(--red); background: #f7e9e9; }
+.doorico { width: 46px; height: 46px; color: #fff; margin-bottom: 4px; }
+.steps li svg.ico { width: 1.25em; height: 1.25em; }
+.offer .offerart { flex: 0 1 250px; max-width: 250px; margin: 0 auto; }
+.cardart { display: block; width: 100%; height: auto; }
+
+/* Step diagram: an ordered list. One column on phones, one row on wide screens. */
+.flow { margin: 8px 0 28px; }
+.flow figcaption, .flow .flowcap { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-weight: 700; color: var(--navy-deep); font-size: 1.05rem; margin: 0 0 14px; }
+.flow ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 26px; counter-reset: flow; }
+.flow li { counter-increment: flow; position: relative; display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; align-items: start; background: #fff; border: 1px solid var(--line); border-top: 4px solid var(--navy); border-radius: 6px; padding: 14px 16px; }
+.flow li > svg { grid-row: span 2; width: 48px; height: 48px; padding: 10px; border-radius: 50%; background: #eef1f5; color: var(--navy); }
+.flow li strong { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--navy-deep); line-height: 1.3; }
+.flow li strong::before { content: counter(flow) ". "; color: #7a5712; }
+.flow li span { color: var(--muted); font-size: 0.95rem; line-height: 1.45; }
+.flow li:not(:last-child)::after { content: ""; position: absolute; left: 36px; bottom: -21px; width: 12px; height: 12px; border-right: 3px solid var(--navy); border-bottom: 3px solid var(--navy); transform: rotate(45deg); }
+@media (min-width: 900px) {
+  .flow ol { grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); }
+  .flow li { grid-template-columns: 1fr; }
+  .flow li > svg { grid-row: auto; margin-bottom: 6px; }
+  .flow li:not(:last-child)::after { left: auto; right: -21px; bottom: auto; top: 50%; transform: translateY(-50%) rotate(-45deg); }
+}
+
+/* Who-does-what diagram on the law page */
+.tree { margin: 8px 0 28px; }
+.tree figcaption { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-weight: 700; color: var(--navy-deep); font-size: 1.05rem; margin: 0 0 14px; }
+.tree .node { display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; align-items: start; background: #fff; border: 1px solid var(--line); border-left: 6px solid var(--navy); border-radius: 6px; padding: 14px 16px; max-width: 640px; margin: 0 auto; }
+.tree .node > svg { grid-row: span 2; width: 48px; height: 48px; padding: 10px; border-radius: 50%; background: #eef1f5; color: var(--navy); }
+.tree .node strong { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--navy-deep); line-height: 1.3; }
+.tree .node span { color: var(--muted); font-size: 0.95rem; line-height: 1.45; }
+.tree .down { display: block; width: 14px; height: 14px; margin: 6px auto 14px; border-right: 3px solid var(--navy); border-bottom: 3px solid var(--navy); transform: rotate(45deg); }
+.tree ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+.tree ul .node { max-width: none; height: 100%; border-left-color: var(--gold); }
+
+/* Icon list (who runs bingo, service types) */
+.iconlist { list-style: none; padding: 0; margin: 0 0 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+.iconlist li { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 10px 14px; line-height: 1.3; }
+.iconlist li svg { width: 42px; height: 42px; padding: 8px; border-radius: 50%; background: #eef1f5; color: var(--navy); flex: none; }
+
+/* Horizontal bars drawn from numbers already on the page */
+.bars { margin: 14px 0 12px; max-width: 520px; }
+.bars figcaption { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-weight: 700; color: var(--navy-deep); font-size: 0.95rem; margin: 0 0 8px; }
+.bars ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.bars li { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 0.95rem; }
+.bars .track { position: relative; display: block; height: 18px; background: #eef1f5; border: 1px solid #9aa3ad; border-radius: 3px; }
+.bars .fill { position: absolute; top: 0; bottom: 0; left: 0; background: var(--navy); border-radius: 2px; }
+.bars .fill.range { background: repeating-linear-gradient(135deg, var(--navy) 0 6px, #3f6a99 6px 10px); }
+
+/* Timeline of dates */
+.timeline { margin: 8px 0 28px; }
+.timeline figcaption { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-weight: 700; color: var(--navy-deep); font-size: 1.05rem; margin: 0 0 14px; }
+.timeline ol { list-style: none; margin: 0; padding: 0 0 0 8px; max-width: 760px; }
+.timeline li { position: relative; padding: 0 0 18px 34px; border-left: 3px solid var(--navy); }
+.timeline li:last-child { border-left-color: transparent; padding-bottom: 0; }
+.timeline li::before { content: ""; position: absolute; left: -12px; top: 2px; width: 15px; height: 15px; border-radius: 50%; background: #fff; border: 4px solid var(--navy); }
+.timeline li.maybe::before { border-style: dashed; }
+.timeline time, .timeline .when { display: block; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-weight: 700; color: var(--navy-deep); }
+.timeline li span { display: block; color: var(--muted); font-size: 0.95rem; }
+
+/* Contact rows */
+.withico { display: flex; align-items: center; gap: 10px; }
+.withico svg { width: 40px; height: 40px; padding: 8px; border-radius: 50%; background: #eef1f5; color: var(--navy); flex: none; }
+
+@media (forced-colors: active) {
+  .flow li:not(:last-child)::after, .tree .down { border-color: CanvasText; }
+  .timeline li { border-left-color: CanvasText; }
+  .timeline li::before { border-color: CanvasText; background: Canvas; }
+  .bars .fill { background: CanvasText; forced-color-adjust: none; }
+  .bars .track { border-color: CanvasText; }
+}
+@media print {
+  .flow li, .tree .node, .iconlist li { break-inside: avoid; }
+}
+.withico span, .flow li span, .flow li strong, .tree .node span, .iconlist li { min-width: 0; overflow-wrap: anywhere; }
